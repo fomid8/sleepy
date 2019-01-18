@@ -19,7 +19,22 @@ bool quit = false;
 SDL_Event event;
 
 void init();
+void sakht_mane();
+//void move_mane;
+//void show_mane;
 void close();
+
+struct mane
+{
+    int x=200;
+    int y1=0;
+    int height;
+    int width=40;
+    int height2;
+    int y2;
+};
+
+mane a,b,c;
 
 int main(int argc, char *args[])
 {
@@ -35,6 +50,14 @@ int main(int argc, char *args[])
                 return 0;
             }
         }
+        //SDL_SetRenderDrawColor(render, 250, 250, 50, 0xFF);
+        //SDL_RenderClear(render);
+
+        //filledPolygonColor()
+        sakht_mane();
+
+        SDL_RenderPresent(render);
+        SDL_Delay(1000);
     }
     close();
 }
@@ -61,6 +84,18 @@ void init()
     }
 
   
+}
+
+void sakht_mane()
+{
+    a.height=rand()%300;
+
+    SDL_Rect fillRect1 = {a.x,a.y1, a.width, a.height};
+
+    SDL_Rect fillRect2 = {100, a.y1, a.width, a.height};
+    SDL_SetRenderDrawColor(render, 50, 0x00, 0x00, 255);
+    SDL_RenderFillRect(render, &fillRect1);
+    SDL_RenderFillRect(render, &fillRect2);
 }
 
 void close()
