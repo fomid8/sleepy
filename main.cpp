@@ -14,7 +14,7 @@ using namespace std;
 //window
 const int width = 400;
 const int height = 600;
-
+int direct = 0 ;
 
 SDL_Surface* surface=NULL;
 SDL_Window* gwindow=NULL;
@@ -80,6 +80,14 @@ int main(int argc, char *args[])
                 quit = true;
                 return 0;
             }
+            else if(event.type==SDL_KEYDOWN){
+            switch(event.key.keysym.sym){
+            case SDLK_SPACE:
+            direct+=25;
+            }
+
+
+            }
         }
 
         if(a.x+a.w<0){
@@ -89,12 +97,16 @@ int main(int argc, char *args[])
             sakht_mane_b();
         }
 
-
+        if(direct>0){
+        fix.y-=5;
+        direct--;
+        }
 
         SDL_RenderCopy(render, texture, NULL, NULL);
 
         move_mane();
         show_mane();
+        move_bird();
         show_bird();
         SDL_RenderPresent(render);
         SDL_Delay(5);
@@ -188,6 +200,12 @@ void show_mane()
     SDL_RenderFillRect(render, &A);
     SDL_RenderFillRect(render, &b);
     SDL_RenderFillRect(render, &B);
+}
+
+void move_bird(){
+fix.y+=2;
+
+
 }
 
 void show_bird()
