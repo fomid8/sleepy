@@ -33,7 +33,7 @@ void loadmedia();
 //mane ha
 SDL_Rect a,b,A,B;
 const int fasele=width/2;
-const int rah=150;
+const int rah=160;
 void sakht_mane_a();
 void sakht_mane_b();
 void move_mane();
@@ -106,11 +106,11 @@ int main(int argc, char *args[])
         }
 
         //collision a va b
-        if (fix.x + + fix.w >= a.x && fix.x <= a.x + a.w)
+        if (fix.x  + fix.w-10 >= a.x && fix.x <= a.x + a.w)
             if (fix.y <= a.h || fix.y + fix.h >= a.h + rah)
                 fix.y = 550;
 
-        if (fix.x + fix.w >= b.x && fix.x <= b.x + b.w)
+        if (fix.x + fix.w-10 >= b.x && fix.x <= b.x + b.w)
             if (fix.y <= b.h || fix.y + fix.h >= b.h + rah)
                 fix.y = 550;
 
@@ -123,6 +123,9 @@ int main(int argc, char *args[])
         show_mane();
         move_bird();
         show_bird();
+        if(direct>0)
+            SDL_RenderCopy(render, optexture, NULL, &fix);
+
         SDL_RenderPresent(render);
         SDL_Delay(5);
 
@@ -158,7 +161,7 @@ void init()
     texture = SDL_CreateTextureFromSurface(render, image);
     image = IMG_Load("sleepy.png");
     cltexture=SDL_CreateTextureFromSurface(render, image);
-    image= IMG_Load("bird.png");
+    image= IMG_Load("awake.png");
     optexture=SDL_CreateTextureFromSurface(render, image);
     SDL_FreeSurface(image);
 
