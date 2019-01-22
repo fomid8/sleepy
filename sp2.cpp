@@ -22,6 +22,12 @@ SDL_Renderer* render=NULL;
 SDL_Texture * texture;
 SDL_Texture * cltexture;
 SDL_Texture * optexture;
+TTF_Font *sfont;
+SDL_Texture * wtexture;
+
+SDL_Rect p_score = {35,0};
+int nscore = 0;
+char cscore='0';
 
 bool quit = false;
 SDL_Event event;
@@ -30,6 +36,7 @@ SDL_Event event;
 void init();
 
 void loadmedia();
+
 //mane ha
 SDL_Rect a,b,A,B;
 const int fasele=width/2;
@@ -48,6 +55,7 @@ void game_over();
 void close();
 
 
+
 int main(int argc, char *args[])
 {
     srand(time(0));
@@ -55,7 +63,6 @@ int main(int argc, char *args[])
 
     SDL_SetRenderDrawColor(render, 250, 250, 50, 0xFF);
     SDL_RenderClear(render);
-
 
 
     //keshidan avalin mane
@@ -72,6 +79,13 @@ int main(int argc, char *args[])
     SDL_RenderFillRect(render, &A);
 
     sakht_mane_b();
+
+    sfont = TTF_OpenFont("font.ttf", 50);
+    SDL_Color color = {255, 100, 100};
+    SDL_Surface *write = TTF_RenderText_Solid(sfont, &cscore, color);
+    wtexture = SDL_CreateTextureFromSurface(render, write);
+    SDL_QueryTexture(wtexture, NULL, NULL, &p_score.w, &p_score.h);
+
     while (!quit)
     {
         while (SDL_PollEvent(&event) != 0)
@@ -114,6 +128,16 @@ int main(int argc, char *args[])
             if (fix.y <= b.h || fix.y + fix.h >= b.h + rah)
                 fix.y = 550;
 
+        //score
+        if(fix.x == a.x + a.w || fix.x == b.x + b.w){
+            nscore++;
+            cscore= char (nscore + 48);
+            write = TTF_RenderText_Solid(sfont, &cscore, color);
+            wtexture = SDL_CreateTextureFromSurface(render, write);
+           // cout<<cscore<<'\t'<<nscore<<'\n';
+         
+        }
+
         //if (fix.y==580)
           //  game_over();
 
@@ -123,8 +147,13 @@ int main(int argc, char *args[])
         show_mane();
         move_bird();
         show_bird();
+
+        //awake bird
         if(direct>0)
             SDL_RenderCopy(render, optexture, NULL, &fix);
+
+        //neveshte
+        SDL_RenderCopy(render,wtexture,NULL,&p_score);
 
         SDL_RenderPresent(render);
         SDL_Delay(5);
@@ -165,7 +194,12 @@ void init()
     optexture=SDL_CreateTextureFromSurface(render, image);
     SDL_FreeSurface(image);
 
-
+    //sfont = TTF_OpenFont("font.ttf",50);
+    //SDL_Color color = {255,0,0};
+    //SDL_Surface *write = TTF_RenderText_Solid(sfont,&cscore,color);
+    //wtexture = SDL_CreateTextureFromSurface(render,write);
+    //SDL_QueryTexture(wtexture,NULL,NULL,&p_score.w,&p_score.h);
+    //TTF_CloseFont(sfont);
 }
 
 void sakht_mane_a()
@@ -228,7 +262,7 @@ fix.y+=2;
 
 void show_bird()
 {
-SDL_RenderCopy(render,cltexture,NULL,&fix);
+    SDL_RenderCopy(render,cltexture,NULL,&fix);
 
 }
 
@@ -243,5 +277,6 @@ void close()
     SDL_DestroyRenderer(render);
     SDL_DestroyWindow(gwindow);
     IMG_Quit();
+    TTF_Quit();
     SDL_Quit();
 }
